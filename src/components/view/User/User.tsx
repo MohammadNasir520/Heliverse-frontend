@@ -22,7 +22,7 @@ const User = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   const { data: AllUser } = useGetAllUserQuery(undefined);
-  const { data } = useGetAllUserQuery({ ...query });
+  const { data } = useGetAllUserQuery({ ...query, searchTerm: searchTerm });
   const users = data?.data;
   const meta = data?.meta;
   // console.log(meta);
@@ -68,13 +68,14 @@ const User = () => {
               <form>
                 <div className="relative h-11 w-full min-w-[200px]">
                   <input
-                    onChange={(e) =>
+                    value={searchTerm}
+                    onChange={(e) => (
                       setQuery({
                         ...query,
-                        searchTerm: e.target.value,
                         page: 1,
-                      })
-                    }
+                      }),
+                      setSearchTerm(e.target.value)
+                    )}
                     className="peer h-full w-full border-b border-gray-gray-200 bg-transparent pt-4 pb-1.5 font-sans text-sm font-normal text-gray-gray-700 outline outline-0 transition-all placeholder-shown:border-gray-gray-200 focus:border-gray-500 focus:outline-0 disabled:border-0 disabled:bg-gray-gray-50"
                     placeholder=" "
                   />
@@ -88,10 +89,10 @@ const User = () => {
 
           <div className="ml-3 flex justify-center ">
             <div>
-              {searchTerm ? (
+              {Object.keys(query).length || searchTerm ? (
                 <button
                   onClick={() => {
-                    setSearchTerm("");
+                    setQuery({}), setSearchTerm("");
                   }}
                   className="middle none center bg-green-800  px-4 py-2 mt-4   text-xs font-bold uppercase text-white shadow-md shadow-gray-500/20 transition-all hover:shadow-lg "
                 >
@@ -105,8 +106,8 @@ const User = () => {
         </div>
       </div>
 
-      {/* select Domain */}
-      <div className="flex ">
+      {/* Filter Option*/}
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 lg:w-3/4 mx-auto">
         <div className="relative h-10 w-52 min-w-[200px]">
           <select
             onChange={(event) => {
@@ -176,8 +177,8 @@ const User = () => {
       <div>
         {users?.length ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 ">
-            {users?.map((user: IUser) => (
-              <UserCard user={user}></UserCard>
+            {users?.map((user: IUser, i: number) => (
+              <UserCard key={i} user={user}></UserCard>
             ))}
           </div>
         ) : (
