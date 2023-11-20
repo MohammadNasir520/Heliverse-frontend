@@ -1,9 +1,20 @@
 import { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { getUserInfo } from "../../../utils/jwt";
+import { authKey, removeUserInfo } from "../../../utils/localStorage";
 
 const Navbar = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
-  const id = false;
+  const navigate = useNavigate();
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { userId } = getUserInfo() as any;
+  console.log({ userId });
+
+  const handleSignOut = () => {
+    removeUserInfo(authKey);
+    navigate("/login");
+  };
 
   const navItems = [
     {
@@ -11,15 +22,16 @@ const Navbar = () => {
       to: "/",
     },
     {
-      title: "Home",
-      to: "/f",
+      title: "My Teams",
+      to: "/teams",
     },
   ];
 
   const signOption = (
     <div className=" lg:flex">
-      {id ? (
+      {userId ? (
         <div
+          onClick={handleSignOut}
           className={`cursor-pointer ${
             isMenuOpen
               ? "block px-1 py-1 mb-2 leading-loose text-center text-white  bg-blue-600 hover:bg-blue-700  rounded-xl  text-base   font-semibold"
