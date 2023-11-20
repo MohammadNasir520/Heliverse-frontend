@@ -4,7 +4,10 @@ const userUrl = "/users";
 const userApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     getAllUser: build.query({
-      query: () => `${userUrl}`,
+      query: (searchTerm) => ({
+        url: `${userUrl}`,
+        params: searchTerm,
+      }),
     }),
   }),
 });

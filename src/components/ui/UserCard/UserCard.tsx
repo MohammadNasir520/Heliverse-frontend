@@ -16,7 +16,7 @@ const UserCard = ({ user }: IProps) => {
   } = user;
 
   const name = first_name + " " + last_name;
-  console.log(user);
+  // console.log(user);
   return (
     <div>
       <div className="my-7 max-w-sm mx-auto bg-white  rounded-lg overflow-hidden shadow-lg">

@@ -1,5 +1,5 @@
 const Teams = () => {
-  return <div>teams</div>;
+  return <div className=" min-h-screen">teams</div>;
 };
 
 export default Teams;
