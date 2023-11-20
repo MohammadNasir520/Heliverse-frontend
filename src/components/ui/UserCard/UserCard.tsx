@@ -5,15 +5,7 @@ interface IProps {
 }
 
 const UserCard = ({ user }: IProps) => {
-  const {
-    avatar,
-    available,
-    domain,
-
-    first_name,
-    last_name,
-    gender,
-  } = user;
+  const { avatar, available, domain, id, first_name, last_name, gender } = user;
 
   const name = first_name + " " + last_name;
   // console.log(user);
@@ -29,6 +21,9 @@ const UserCard = ({ user }: IProps) => {
             />
             <div className="">
               <h3 className="font-bold text-xl text-gray-800  mb-1">{name}</h3>
+              <h3 className="font-bold text-xl text-gray-800  mb-1">
+                ID: {id}
+              </h3>
               <div className="inline-flex text-gray-700  items-center">
                 <p>{available ? "available" : "not available"}</p>
               </div>
