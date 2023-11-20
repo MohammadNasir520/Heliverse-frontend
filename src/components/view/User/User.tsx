@@ -16,15 +16,16 @@ export type IUser = {
 };
 
 const User = () => {
+  const [query, setQuery] = useState({});
   const [searchTerm, setSearchTerm] = useState<string>("");
 
-  const { data } = useGetAllUserQuery({ searchTerm: searchTerm });
+  const { data } = useGetAllUserQuery({ ...query });
   const users = data?.data;
   const meta = data?.meta;
   console.log(meta);
   console.log(users);
 
-  const totalPages = Math.ceil(meta.total / meta?.limit);
+  const totalPages = Math.ceil(meta?.total / meta?.limit);
 
   // Generate an array of numbers from 1 to totalPages
   const pageNumbers = Array.from(
@@ -45,7 +46,9 @@ const User = () => {
               <form>
                 <div className="relative h-11 w-full min-w-[200px]">
                   <input
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onChange={(e) =>
+                      setQuery({ ...query, searchTerm: e.target.value })
+                    }
                     className="peer h-full w-full border-b border-blue-gray-200 bg-transparent pt-4 pb-1.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border-blue-gray-200 focus:border-gray-500 focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
                     placeholder=" "
                   />
@@ -77,7 +80,9 @@ const User = () => {
       {/* search and filter end */}
 
       <div className="w-full">
-        <h1 className="text-center">total:{meta?.total}</h1>
+        <h1 className="text-center">
+          total:{meta?.total} Page:{meta?.page}
+        </h1>
       </div>
       <div>
         {users?.length ? (
@@ -106,12 +111,12 @@ const User = () => {
           </li>
           {pageNumbers?.map((pageNumber) => (
             <li>
-              <a
+              <div
+                onClick={() => setQuery({ ...query, page: pageNumber })}
                 className="mx-1 flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-tr from-blue-600 to-blue-400 p-0 text-sm text-white shadow-md shadow-blue-500/20 transition duration-150 ease-in-out"
-                href="#"
               >
                 {pageNumber}
-              </a>
+              </div>
             </li>
           ))}
 
