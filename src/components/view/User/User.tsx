@@ -81,7 +81,8 @@ const User = () => {
 
       <div className="w-full">
         <h1 className="text-center">
-          total:{meta?.total} Page:{meta?.page}
+          Page Number:{meta?.page} In this Page:{meta?.limit} total:
+          {meta?.total}
         </h1>
       </div>
       <div>
@@ -103,17 +104,21 @@ const User = () => {
       <nav>
         <ul className="flex">
           <li>
-            <a
+            <div
+              onClick={() => setQuery({ ...query, page: meta?.page - 1 })}
               className="mx-1 flex h-9 w-9 items-center justify-center rounded-full border border-blue-gray-100 bg-transparent p-0 text-sm text-blue-gray-500 transition duration-150 ease-in-out hover:bg-light-300"
-              href="#"
-              aria-label="Previous"
-            ></a>
+              aria-label="Next"
+            ></div>
           </li>
-          {pageNumbers?.map((pageNumber) => (
+          {pageNumbers.slice(0, 10)?.map((pageNumber) => (
             <li>
               <div
                 onClick={() => setQuery({ ...query, page: pageNumber })}
-                className="mx-1 flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-tr from-blue-600 to-blue-400 p-0 text-sm text-white shadow-md shadow-blue-500/20 transition duration-150 ease-in-out"
+                className={`${
+                  pageNumber === meta?.page
+                    ? "from-blue-600 to-blue-400"
+                    : " bg-slate-300"
+                } mx-1  flex h-9 w-9 items-center justify-center cursor-pointer rounded-full bg-gradient-to-tr  p-0 text-sm text-black shadow-md shadow-blue-500/20 transition duration-150 ease-in-out`}
               >
                 {pageNumber}
               </div>
@@ -123,11 +128,11 @@ const User = () => {
           {}
 
           <li>
-            <a
+            <div
+              onClick={() => setQuery({ ...query, page: meta?.page + 1 })}
               className="mx-1 flex h-9 w-9 items-center justify-center rounded-full border border-blue-gray-100 bg-transparent p-0 text-sm text-blue-gray-500 transition duration-150 ease-in-out hover:bg-light-300"
-              href="#"
               aria-label="Next"
-            ></a>
+            ></div>
           </li>
         </ul>
       </nav>
