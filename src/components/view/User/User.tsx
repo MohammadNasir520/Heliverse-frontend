@@ -14,13 +14,14 @@ export type IUser = {
   domain: string;
   available: boolean;
   password: string;
-  tema?: string;
+  team?: string;
 };
 
 const User = () => {
   const [query, setQuery] = useState({});
   const [searchTerm, setSearchTerm] = useState<string>("");
 
+  const { data: AllUser } = useGetAllUserQuery(undefined);
   const { data } = useGetAllUserQuery({ ...query });
   const users = data?.data;
   const meta = data?.meta;
@@ -29,12 +30,21 @@ const User = () => {
 
   const totalPages = Math.ceil(meta?.total / meta?.limit);
 
-  // Generate an array of numbers from 1 to totalPages
+  // Generating an array of numbers from 1 to totalPages
   const pageNumbers = Array.from(
     { length: totalPages },
     (_, index) => index + 1
   );
   // console.log(pageNumbers);
+
+  const teamUniqueDomain = new Set();
+
+  AllUser?.data?.forEach((member: any) => {
+    teamUniqueDomain.add(member.domain);
+  });
+
+  const teamUniqueDomainArray = Array.from(teamUniqueDomain);
+  console.log(teamUniqueDomainArray);
 
   const handleGoto = (event: any) => {
     event.preventDefault();
@@ -59,7 +69,11 @@ const User = () => {
                 <div className="relative h-11 w-full min-w-[200px]">
                   <input
                     onChange={(e) =>
-                      setQuery({ ...query, searchTerm: e.target.value })
+                      setQuery({
+                        ...query,
+                        searchTerm: e.target.value,
+                        page: 1,
+                      })
                     }
                     className="peer h-full w-full border-b border-gray-gray-200 bg-transparent pt-4 pb-1.5 font-sans text-sm font-normal text-gray-gray-700 outline outline-0 transition-all placeholder-shown:border-gray-gray-200 focus:border-gray-500 focus:outline-0 disabled:border-0 disabled:bg-gray-gray-50"
                     placeholder=" "
@@ -71,6 +85,7 @@ const User = () => {
               </form>
             </div>
           </div>
+
           <div className="ml-3 flex justify-center ">
             <div>
               {searchTerm ? (
@@ -87,6 +102,67 @@ const User = () => {
               )}
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* select Domain */}
+      <div className="flex ">
+        <div className="relative h-10 w-52 min-w-[200px]">
+          <select
+            onChange={(event) => {
+              setQuery({ ...query, domain: event.target.value });
+            }}
+            className="peer h-full w-full outline-none rounded-[3px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 empty:!bg-red-500 focus:border-1 focus:border-gray-500 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
+          >
+            <option disabled selected value="">
+              select Domain
+            </option>
+            {teamUniqueDomainArray?.map((value: any, i: number) => (
+              <option key={i} value={value}>
+                {value}
+              </option>
+            ))}
+          </select>
+          <label className=" font-sans before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-blue-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[3.75] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-gray-500 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:border-gray-500 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:border-gray-500 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
+            Domain
+          </label>
+        </div>
+        <div className="relative h-10 w-52 min-w-[200px]">
+          <select
+            onChange={(event) => {
+              setQuery({ ...query, gender: event.target.value });
+              console.log(event.target.value);
+            }}
+            className="peer h-full w-full outline-none rounded-[3px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 empty:!bg-red-500 focus:border-1 focus:border-gray-500 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
+          >
+            <option disabled selected value="">
+              select Gender
+            </option>
+
+            <option value={"Male"}>Male</option>
+            <option value={"Female"}>Female</option>
+          </select>
+          <label className=" font-sans before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-blue-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[3.75] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-gray-500 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:border-gray-500 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:border-gray-500 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
+            Gender
+          </label>
+        </div>
+        <div className="relative h-10 w-52 min-w-[200px]">
+          <select
+            onChange={(event) => {
+              setQuery({ ...query, available: event.target.value });
+            }}
+            className="peer h-full w-full outline-none rounded-[3px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 empty:!bg-red-500 focus:border-1 focus:border-gray-500 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
+          >
+            <option disabled selected value="">
+              select Availability
+            </option>
+
+            <option value={"true"}>Available</option>
+            <option value={"false"}>NotAvailable</option>
+          </select>
+          <label className=" font-sans before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-blue-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[3.75] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-gray-500 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:border-gray-500 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:border-gray-500 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
+            Availability
+          </label>
         </div>
       </div>
       {/* search and filter end */}
@@ -118,7 +194,7 @@ const User = () => {
           <li>
             <div
               onClick={() => setQuery({ ...query, page: meta?.page - 1 })}
-              className="mx-1 flex h-9 w-9 items-center justify-center rounded-full border border-gray-gray-100 bg-transparent p-0 text-sm text-gray-gray-500 transition duration-150 ease-in-out hover:bg-light-300"
+              className="mx-1 cursor-pointer flex h-9 w-9 items-center justify-center rounded-full border border-gray-gray-100 bg-transparent p-0 text-sm text-gray-gray-500 transition duration-150 ease-in-out hover:bg-light-300"
               aria-label="Next"
             >
               <FaAnglesLeft />
@@ -146,7 +222,7 @@ const User = () => {
           <li>
             <div
               onClick={() => setQuery({ ...query, page: meta?.page + 1 })}
-              className="mx-1 flex h-9 w-9 items-center justify-center rounded-full border border-gray-gray-100 bg-transparent p-0 text-sm text-gray-gray-500 transition duration-150 ease-in-out hover:bg-light-300"
+              className="mx-1  cursor-pointer flex h-9 w-9 items-center justify-center rounded-full border border-gray-gray-100 bg-transparent p-0 text-sm text-gray-gray-500 transition duration-150 ease-in-out hover:bg-light-300"
               aria-label="Next"
             >
               <FaAnglesRight />
