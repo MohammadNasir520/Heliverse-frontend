@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import { useGetAllUserQuery } from "../../../redux/api/userApi/userApi";
 import UserCard from "../../ui/UserCard/UserCard";
+import { FaAnglesRight, FaAnglesLeft } from "react-icons/fa6";
 
 export type IUser = {
   id: number;
@@ -37,7 +39,11 @@ const User = () => {
   const handleGoto = (event: any) => {
     event.preventDefault();
     const goPageNo = event.target.goPageNo.value;
+    if (goPageNo > totalPages || goPageNo < 1) {
+      return;
+    }
     setQuery({ ...query, page: goPageNo });
+    event.target.reset();
   };
   return (
     <div>
@@ -107,14 +113,16 @@ const User = () => {
 
       {/* pagination */}
 
-      <div className="flex">
+      <div className="flex justify-center">
         <ul className="flex">
           <li>
             <div
               onClick={() => setQuery({ ...query, page: meta?.page - 1 })}
               className="mx-1 flex h-9 w-9 items-center justify-center rounded-full border border-gray-gray-100 bg-transparent p-0 text-sm text-gray-gray-500 transition duration-150 ease-in-out hover:bg-light-300"
               aria-label="Next"
-            ></div>
+            >
+              <FaAnglesLeft />
+            </div>
           </li>
           {pageNumbers
             .slice(
@@ -140,7 +148,9 @@ const User = () => {
               onClick={() => setQuery({ ...query, page: meta?.page + 1 })}
               className="mx-1 flex h-9 w-9 items-center justify-center rounded-full border border-gray-gray-100 bg-transparent p-0 text-sm text-gray-gray-500 transition duration-150 ease-in-out hover:bg-light-300"
               aria-label="Next"
-            ></div>
+            >
+              <FaAnglesRight />
+            </div>
           </li>
         </ul>
 
