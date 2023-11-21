@@ -5,6 +5,7 @@ import UserCard from "../../ui/UserCard/UserCard";
 import { FaAnglesRight, FaAnglesLeft } from "react-icons/fa6";
 
 export type IUser = {
+  _id: string;
   id: number;
   first_name: string;
   last_name: string;
@@ -25,8 +26,6 @@ const User = () => {
   const { data } = useGetAllUserQuery({ ...query, searchTerm: searchTerm });
   const users = data?.data;
   const meta = data?.meta;
-  // console.log(meta);
-  // console.log(users);
 
   const totalPages = Math.ceil(meta?.total / meta?.limit);
 
@@ -35,7 +34,6 @@ const User = () => {
     { length: totalPages },
     (_, index) => index + 1
   );
-  // console.log(pageNumbers);
 
   const teamUniqueDomain = new Set();
 
@@ -44,7 +42,6 @@ const User = () => {
   });
 
   const teamUniqueDomainArray = Array.from(teamUniqueDomain);
-  console.log(teamUniqueDomainArray);
 
   const handleGoto = (event: any) => {
     event.preventDefault();
@@ -132,7 +129,6 @@ const User = () => {
           <select
             onChange={(event) => {
               setQuery({ ...query, gender: event.target.value });
-              console.log(event.target.value);
             }}
             className="peer h-full w-full outline-none rounded-[3px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 empty:!bg-red-500 focus:border-1 focus:border-gray-500 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
           >

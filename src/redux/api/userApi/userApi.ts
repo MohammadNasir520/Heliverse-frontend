@@ -9,7 +9,12 @@ const userApi = baseApi.injectEndpoints({
         params: searchTerm,
       }),
     }),
+    getSingleUser: build.query({
+      query: (id) => ({
+        url: `${userUrl}/${id}`,
+      }),
+    }),
   }),
 });
 
-export const { useGetAllUserQuery } = userApi;
+export const { useGetAllUserQuery, useGetSingleUserQuery } = userApi;

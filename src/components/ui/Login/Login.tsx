@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../../../redux/api/authApi/authApi";
 import { setToLocalStorage } from "../../../utils/localStorage";
 import toast from "react-hot-toast/headless";
@@ -10,6 +10,8 @@ const Login = () => {
   const errormessage = error?.data?.message;
 
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location?.state?.from?.pathname || "/";
 
   const handleLogin = async (event: any) => {
     event.preventDefault();
@@ -26,9 +28,8 @@ const Login = () => {
       if (loginRes?.success) {
         setToLocalStorage("accessToken", loginRes?.data);
         toast.success("login successful");
-        navigate("/");
+        navigate(from);
       }
-      console.log("loginRes", loginRes);
     } catch (error) {
       //@ts-expect-errormessage
       toast.error(error?.data?.message);

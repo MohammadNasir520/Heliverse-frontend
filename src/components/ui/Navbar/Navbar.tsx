@@ -9,7 +9,6 @@ const Navbar = () => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { userId } = getUserInfo() as any;
-  console.log({ userId });
 
   const handleSignOut = () => {
     removeUserInfo(authKey);
